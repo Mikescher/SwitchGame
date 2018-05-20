@@ -1,0 +1,136 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:.\
+/intermediateDir:../obj/$(Platform)
+/platform:iOS
+/config:
+/profile:Reach
+/compress:True
+
+#-------------------------------- References --------------------------------#
+
+/reference:..\..\..\Bin\SwitchGame.Content.Pipeline\SwitchGame.Content.Pipeline.dll
+
+#---------------------------------- Content ---------------------------------#
+
+#begin fonts/debugFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:fonts/debugFont.spritefont
+
+#begin fonts/debugFontSmall.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:fonts/debugFontSmall.spritefont
+
+#begin fonts/hudFontBold.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:fonts/hudFontBold.spritefont
+
+#begin fonts/hudFontRegular.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:fonts/hudFontRegular.spritefont
+
+#begin textures/spritesheet_default_bd.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/spritesheet_default_bd.png
+
+#begin textures/spritesheet_default_fd.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/spritesheet_default_fd.png
+
+#begin textures/spritesheet_default_hd.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/spritesheet_default_hd.png
+
+#begin textures/spritesheet_default_ld.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/spritesheet_default_ld.png
+
+#begin textures/spritesheet_default_md.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/spritesheet_default_md.png
+
+#begin textures/spritesheet_default-sheet_bd.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/build:textures/spritesheet_default-sheet_bd.json
+
+#begin textures/spritesheet_default-sheet_fd.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/build:textures/spritesheet_default-sheet_fd.json
+
+#begin textures/spritesheet_default-sheet_hd.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/build:textures/spritesheet_default-sheet_hd.json
+
+#begin textures/spritesheet_default-sheet_ld.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/build:textures/spritesheet_default-sheet_ld.json
+
+#begin textures/spritesheet_default-sheet_md.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/build:textures/spritesheet_default-sheet_md.json
+
+#begin fonts/levelBackgroundFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:fonts/levelBackgroundFont.spritefont
+

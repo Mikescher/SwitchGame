@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>15228a14-90be-44fa-8203-b705ff37ef1f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SwitchGame.Content</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\debugFont.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\debugFont.xnb" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\debugFontSmall.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\debugFontSmall.xnb" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\hudFontBold.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\hudFontBold.xnb" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\hudFontRegular.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\hudFontRegular.xnb" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\levelBackgroundFont.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\fonts\levelBackgroundFont.xnb" />
+    <None Include="$(MSBuildThisFileDirectory)L10N\L10N.sqlite3" />
+    <None Include="$(MSBuildThisFileDirectory)L10N\L10NOutputMissings.linq" />
+    <None Include="$(MSBuildThisFileDirectory)L10N\L10NProcessor.linq" />
+    <None Include="$(MSBuildThisFileDirectory)TexturePacker\spritesheet.tps" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default-sheet_bd.json" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default-sheet_fd.json" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default-sheet_hd.json" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default-sheet_ld.json" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default-sheet_md.json" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default_bd.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default_fd.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default_hd.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default_ld.png" />
+    <None Include="$(MSBuildThisFileDirectory)Content\textures\spritesheet_default_md.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Content\music\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Content\shaders\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Content\sounds\" />
+  </ItemGroup>
+</Project>

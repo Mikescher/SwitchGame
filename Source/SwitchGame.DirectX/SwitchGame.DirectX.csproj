@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{DAED060D-BE0D-44D1-AC38-E189C7A6D300}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <MonoGamePlatform>Windows</MonoGamePlatform>
+    <MonoGameContentBuilderExe>
+    </MonoGameContentBuilderExe>
+    <RootNamespace>SwitchGame.DirectX</RootNamespace>
+    <AssemblyName>SwitchGame.DirectX</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Bin\Debug\WindowsDX\</OutputPath>
+    <DefineConstants>DEBUG;__WINDOWS__;__DESKTOP__;GD_FULL</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Bin\Release\WindowsDX\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+    <DefineConstants>__WINDOWS__;__DESKTOP__;GD_FULL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.6.0.1625\lib\net40\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Icon.png" />
+    <MonoGameContentReference Include="..\SwitchGame.Content\Content\Content.mgcb">
+      <Link>Content\Content.mgcb</Link>
+    </MonoGameContentReference>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <ItemGroup>
+    <Folder Include="Impl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\External\DebugView.Portable\DebugView.Portable.csproj">
+      <Project>{550f035e-f23e-4999-bb01-4857486e4125}</Project>
+      <Name>DebugView.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\External\FarseerPhysics.Portable\FarseerPhysics.Portable\FarseerPhysics.Portable.csproj">
+      <Project>{a1807d3f-3546-4c28-b713-c4f767383b61}</Project>
+      <Name>FarseerPhysics.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SwitchGame.Common\SwitchGame.Common.csproj">
+      <Project>{d8d02f4e-92c8-4e02-9b79-76c9f996fb8b}</Project>
+      <Name>SwitchGame.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SwitchGame.Core\SwitchGame.Core.csproj">
+      <Project>{3fe0a696-c3ba-450d-9b03-e264af024f0d}</Project>
+      <Name>SwitchGame.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoSAMFramework.Portable\MonoSAMFramework.Portable.csproj">
+      <Project>{550f036e-f23e-4999-bb01-4857486e4125}</Project>
+      <Name>MonoSAMFramework.Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>texturepacker $(SolutionDir)SwitchGame.Content\TexturePacker\spritesheet.tps</PreBuildEvent>
+  </PropertyGroup>
+</Project>
