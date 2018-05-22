@@ -42,16 +42,9 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SwitchGame.Android.IAB\Impl\XamarinUDPClient.cs">
-      <Link>Impl\XamarinUDPClient.cs</Link>
-    </Compile>
-    <Compile Include="..\SwitchGame.DirectX\Impl\WindowsBillingAdapter.cs">
-      <Link>Impl\WindowsBillingAdapter.cs</Link>
-    </Compile>
-    <Compile Include="..\SwitchGame.DirectX\Impl\WindowsFileHelper.cs">
-      <Link>Impl\WindowsFileHelper.cs</Link>
-    </Compile>
     <Compile Include="Impl\WindowsBridge.cs" />
+    <Compile Include="Impl\WindowsEmulatingBillingAdapter.cs" />
+    <Compile Include="Impl\WindowsFileHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,18 +66,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\External\DebugView.Portable\DebugView.Portable.csproj">
-      <Project>{550f035e-f23e-4999-bb01-4857486e4125}</Project>
-      <Name>DebugView.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\FarseerPhysics.Portable\FarseerPhysics.Portable\FarseerPhysics.Portable.csproj">
-      <Project>{a1807d3f-3546-4c28-b713-c4f767383b61}</Project>
-      <Name>FarseerPhysics.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SwitchGame.Common\SwitchGame.Common.csproj">
-      <Project>{d8d02f4e-92c8-4e02-9b79-76c9f996fb8b}</Project>
-      <Name>SwitchGame.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SwitchGame.Core\SwitchGame.Core.csproj">
       <Project>{3fe0a696-c3ba-450d-9b03-e264af024f0d}</Project>
       <Name>SwitchGame.Core</Name>

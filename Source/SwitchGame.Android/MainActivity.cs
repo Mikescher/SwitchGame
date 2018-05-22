@@ -12,7 +12,7 @@ using MonoSAMFramework.Portable;
 
 namespace SwitchGame.Android
 {
-	[Activity(Label = "Cannon Conquest",
+	[Activity(Label = "Switch Game",
 		MainLauncher = true,
 		Icon = "@drawable/icon",
 		Theme = "@style/Theme.Splash",
@@ -29,9 +29,9 @@ namespace SwitchGame.Android
 		{
 			base.OnCreate(savedInstanceState);
 
-			_impl = new AndroidBridge_Full(this);
-            MonoSAMGame.StaticBridge = _impl;
-            var g = new MainGame();
+			_impl = new AndroidBridge(this);
+			MonoSAMGame.StaticBridge = _impl;
+			var g = new MainGame();
 			SetContentView(g.Services.GetService<View>());
 			g.Run();
 		}
@@ -46,7 +46,7 @@ namespace SwitchGame.Android
 			}
 			catch (Exception e)
 			{
-				SAMLog.Error("AMA_FULL::OnDestroy", e);
+				SAMLog.Error("AMA::OnDestroy", e);
 			}
 		}
 
@@ -54,13 +54,13 @@ namespace SwitchGame.Android
 		{
 			try
 			{
-				SAMLog.Debug("BTScanReciever::OnActivityResult(" + data?.Action + ")");
+				SAMLog.Debug("AMA::OnActivityResult(" + data?.Action + ")");
 
 				_impl.HandleActivityResult(requestCode, resultCode, data);
 			}
 			catch (Exception e)
 			{
-				SAMLog.Error("AMA_FULL::OnActivityResult", e);
+				SAMLog.Error("AMA::OnActivityResult", e);
 			}
 		}
 

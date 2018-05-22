@@ -134,3 +134,15 @@
 /processorParam:TextureFormat=Color
 /build:fonts/levelBackgroundFont.spritefont
 
+#begin sounds/button.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/button.ogg
+
+#begin sounds/click.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/click.ogg
+

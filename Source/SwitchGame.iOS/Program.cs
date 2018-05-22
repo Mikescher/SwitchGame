@@ -1,10 +1,10 @@
 ﻿using Foundation;
-using SwitchGame.iOS.Full.Impl;
 using SwitchGame.Shared;
 using MonoSAMFramework.Portable;
 using UIKit;
+using SwitchGame.iOS.Impl;
 
-namespace SwitchGame.iOS.Full
+namespace SwitchGame.iOS
 {
 	[Register("AppDelegate")]
 	class Program : UIApplicationDelegate
@@ -14,7 +14,7 @@ namespace SwitchGame.iOS.Full
 
 		internal static void RunGame()
 		{
-            MonoSAMGame.StaticBridge = _impl = new AppleBridge();
+			MonoSAMGame.StaticBridge = _impl = new AppleBridge();
 			game = new MainGame();
 			game.Run();
 		}

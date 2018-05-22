@@ -1,14 +1,5 @@
 ﻿using System;
 using System.IO;
-using SwitchGame.Graphfileformat.Blueprint;
-using SwitchGame.Levelfileformat.Blueprint;
-using SwitchGame.Shared.GlobalAgents;
-using SwitchGame.Shared.Network.Multiplayer;
-using SwitchGame.Shared.Resources;
-using SwitchGame.Shared.SaveData;
-using SwitchGame.Shared.Screens.OverworldScreen;
-using SwitchGame.Shared.Screens.NormalGameScreen.Fractions;
-using SwitchGame.Shared.Screens.WorldMapScreen;
 using Microsoft.Xna.Framework;
 using MonoSAMFramework.Portable;
 using MonoSAMFramework.Portable.DeviceBridge;
@@ -16,19 +7,14 @@ using MonoSAMFramework.Portable.Extensions;
 using MonoSAMFramework.Portable.LogProtocol;
 using MonoSAMFramework.Portable.Screens;
 using MonoSAMFramework.Portable.Sound;
-using SwitchGame.Shared.Screens.NormalGameScreen;
-using SwitchGame.Shared.Screens.OverworldScreen.Entities;
 using System.Text;
 using SwitchGame.Shared.DeviceBridge;
-using SwitchGame.Shared.Network.Backend;
-using SwitchGame.Shared.Screens.EndGameScreen;
-using SwitchGame.Shared.Screens.LevelEditorScreen;
-using SwitchGame.Shared.Screens.OverworldScreen.HUD.SCCM;
-using SwitchGame.Shared.Screens.OverworldScreen.Operations;
-using SwitchGame.Shared.Screens.WorldMapScreen.Operations;
-using SwitchGame.Shared.SCCM;
 using MonoSAMFramework.Portable.ColorHelper;
 using MonoSAMFramework.Portable.Localization;
+using SwitchGame.Shared.SaveData;
+using SwitchGame.Shared.Network.Backend;
+using SwitchGame.Shared.Resources;
+using SwitchGame.Shared.Screens.MainMenuScreen;
 
 namespace SwitchGame.Shared
 {
@@ -37,32 +23,30 @@ namespace SwitchGame.Shared
 		public const float MAX_LOG_SEND_DELTA = 25f; // Max send 5 logs in 25sec
 		public const int   MAX_LOG_SEND_COUNT = 5;
 
-		public PlayerProfile Profile;
-		public IGDServerAPI Backend;
+		public UserSettings Settings;
+		public ISGServerAPI Backend;
 
 		public static MainGame Inst;
 
-		public readonly GDSounds GDSound = new GDSounds();
-		public override SAMSoundPlayer Sound => GDSound;
-
-		public static GDFlavor Flavor => Inst?.GDBridge?.Flavor ?? ((IGDOperatingSystemBridge)StaticBridge).Flavor;
+		public readonly SGSounds SGSound = new SGSounds();
+		public override SAMSoundPlayer Sound => SGSound;
 
 		public readonly float[] LastSendLogTimes = new float[MAX_LOG_SEND_COUNT];
 
-		public IGDOperatingSystemBridge GDBridge => (IGDOperatingSystemBridge)Bridge;
+		public ISGOperatingSystemBridge SGBridge => (ISGOperatingSystemBridge)Bridge;
 		
 		public static bool IsShaderless() => StaticBridge.SystemType == SAMSystemType.MONOGAME_IOS;
 
 		public MainGame() : base()
 		{
-			Backend = new GDServerAPI(GDBridge);
-			//Backend = new DummyGDServerAPI();
+			Backend = new SGServerAPI(SGBridge);
+			//Backend = new DummySGServerAPI();
 
-			if (IsIAB()) GDBridge.IAB.Connect(GDConstants.IABList);
+			SGBridge.IAB.Connect(SGConstants.IABList);
 
-			Profile = new PlayerProfile();
+			Settings = new UserSettings();
 
-			var sdata = FileHelper.Inst.ReadDataOrNull(GDConstants.PROFILE_FILENAME); // %LOCALAPPDATA%\IsolatedStorage\...
+			var sdata = FileHelper.Inst.ReadDataOrNull(SGConstants.PROFILE_FILENAME); // %LOCALAPPDATA%\IsolatedStorage\...
 			if (sdata != null)
 			{
 				try
@@ -70,7 +54,7 @@ namespace SwitchGame.Shared
 #if DEBUG
 					var starttime = Environment.TickCount;
 #endif
-					Profile.DeserializeFromString(sdata);
+					Settings.DeserializeFromString(sdata);
 #if DEBUG
 					SAMLog.Debug($"Deserialized profile in {Environment.TickCount - starttime}ms");
 #endif
@@ -79,13 +63,13 @@ namespace SwitchGame.Shared
 				{
 					SAMLog.Error("Deserialization", e);
 
-					Profile = new PlayerProfile();
-					SaveProfile();
+					Settings = new UserSettings();
+					SaveUserConfig();
 				}
 			}
 			else
 			{
-				SaveProfile();
+				SaveUserConfig();
 			}
 
 			SAMLog.LogEvent += SAMLogOnLogEvent;
@@ -93,14 +77,10 @@ namespace SwitchGame.Shared
 
 			for (int i = 0; i < MAX_LOG_SEND_COUNT; i++) LastSendLogTimes[i] = float.MinValue;
 
-			L10NImpl.Init(Profile.Language);
+			L10NImpl.Init(Settings.Language);
 			
-			AddAgent(new HighscoreAgent());
-
 			Inst = this;
 		}
-
-		public static bool IsIAB() => Flavor == GDFlavor.IAB || Flavor == GDFlavor.IAB_NOMP;
 
 		private void SAMLogOnLogEvent(object sender, SAMLog.LogEventArgs args)
 		{
@@ -114,7 +94,7 @@ namespace SwitchGame.Shared
 				}
 
 
-				Backend.LogClient(Profile, args.Entry).EnsureNoError();
+				Backend.LogClient(Settings, args.Entry).EnsureNoError();
 
 
 				for (int i = 0; i < MAX_LOG_SEND_COUNT-1; i++)
@@ -130,16 +110,13 @@ namespace SwitchGame.Shared
 			if (IsDesktop())
 			{
 #if DEBUG
-//			const double ZOOM = 0.925;
-			const double ZOOM = 0.7;
-//			const double ZOOM = 0.525;
-//			const double ZOOM = 0.325;
+				const double ZOOM = 0.525;
 
 				IsMouseVisible = true;
 				Graphics.IsFullScreen = false;
 
-				Graphics.PreferredBackBufferWidth = (int) (2436 * ZOOM);
-				Graphics.PreferredBackBufferHeight = (int) (1125 * ZOOM);
+				Graphics.PreferredBackBufferWidth = (int) (1920 * ZOOM);
+				Graphics.PreferredBackBufferHeight = (int) (1080 * ZOOM);
 				Window.AllowUserResizing = true;
 
 				Graphics.SynchronizeWithVerticalRetrace = false;
@@ -163,172 +140,18 @@ namespace SwitchGame.Shared
 
 		protected override void OnAfterInitialize()
 		{
-//			SetTutorialLevelScreen();
-			SetOverworldScreen(false);
-//			SetWorldMapScreen();
-//			SetLevelScreen(Levels.LEVEL_DBG, FractionDifficulty.KI_EASY, Levels.WORLD_001);
-
-			
-			if (Profile.OnlineUserID >= 0)
-			{
-				Backend.Ping(Profile).ContinueWith(t => Backend.DownloadHighscores(Profile)).EnsureNoError();
-			}
-			else
-			{
-				Backend.CreateUser(Profile).ContinueWith(t => Backend.DownloadHighscores(Profile)).EnsureNoError();
-			}
+			SetCurrentScreen(new MainMenuScreen(this, Graphics));
 		}
 
 		protected override void OnUpdate(SAMTime gameTime)
 		{
-			GDSound.IsEffectsMuted = !Profile.SoundsEnabled;
-			GDSound.IsMusicMuted = !(Profile.MusicEnabled && Profile.SoundsEnabled);
-		}
-
-		public void SetLevelScreen(LevelBlueprint blueprint, FractionDifficulty d, GraphBlueprint source)
-		{
-			var scrn = new GDGameScreen_SP(this, Graphics, blueprint, d, source);
-			SetCurrentScreen(scrn);
-		}
-
-		public void SetEditorTestLevel(LevelBlueprint blueprint, FractionDifficulty d, SCCMLevelData source, GameSpeedModes speed = GameSpeedModes.NORMAL)
-		{
-			var scrn = new GDGameScreen_SCCMTest(this, Graphics, blueprint, d, source, speed);
-			SetCurrentScreen(scrn);
-		}
-
-		public void SetEditorUploadLevel(LevelBlueprint blueprint, SCCMLevelData source, bool first, GameSpeedModes speed = GameSpeedModes.NORMAL)
-		{
-			var scrn = new GDGameScreen_SCCMUpload(this, Graphics, blueprint, source, speed, first);
-			SetCurrentScreen(scrn);
-		}
-
-		public void SetWorldMapScreen(GraphBlueprint g, Guid focus)
-		{
-			SetCurrentScreen(new GDWorldMapScreen(this, Graphics, g, focus));
-		}
-
-		public void SetWorldMapScreenZoomedOut(GraphBlueprint g, LevelBlueprint initFocus = null)
-		{
-			var screen = new GDWorldMapScreen(this, Graphics, g, initFocus?.UniqueID);
-			SetCurrentScreen(screen);
-//			screen.ZoomInstantOut();
-			screen.ZoomOut();
-		}
-
-		public void SetWorldMapScreenWithTransition(GraphBlueprint g)
-		{
-			var screen = new GDWorldMapScreen(this, Graphics, g, null);
-			SetCurrentScreen(screen);
-			screen.AddAgent(new InitialTransitionOperation());
-			screen.ColorOverdraw = 1f;
-		}
-		
-		public void SetOverworldScreen(bool noflicker = true)
-		{
-			var ovs = new GDOverworldScreen(this, Graphics);
-			SetCurrentScreen(ovs);
-
-			if (noflicker)
-			{
-				foreach (var node in ovs.GetEntities<OverworldNode>())
-				{
-					node.FlickerTime = OverworldNode.COLLAPSE_TIME * 10; // no flicker - for sure
-				}
-
-				ovs.GDHUD.ScoreDispMan.FinishCounter();
-			}
-		}
-		
-		public void SetOverworldScreenWithSCCM(SCCMMainPanel.SCCMTab tab, bool noflicker = true)
-		{
-			var ovs = new GDOverworldScreen(this, Graphics);
-			SetCurrentScreen(ovs);
-
-			if (noflicker)
-			{
-				foreach (var node in ovs.GetEntities<OverworldNode>())
-				{
-					node.FlickerTime = OverworldNode.COLLAPSE_TIME * 10; // no flicker - for sure
-				}
-
-				ovs.GDHUD.ScoreDispMan.FinishCounter();
-			}
-			
-			var pnl = new SCCMMainPanel();
-			ovs.HUD.AddModal(pnl, true, 0.5f, 1f);
-			pnl.SelectTab(tab);
-		}
-
-		public void SetOverworldScreenCopy(GDOverworldScreen s)
-		{
-			if (s == null) { SetOverworldScreen(); return; }
-
-			var ovs = new GDOverworldScreen(this, Graphics);
-			SetCurrentScreen(ovs);
-
-			foreach (var node in ovs.GetEntities<OverworldNode>())
-			{
-				node.FlickerTime = OverworldNode.COLLAPSE_TIME * 10; // no flicker - for sure
-			}
-
-			ovs.ScrollAgent.CopyState(s.ScrollAgent);
-		}
-
-		public void SetOverworldScreenWithTransition(GraphBlueprint bp)
-		{
-			var screen = new GDOverworldScreen(this, Graphics);
-			SetCurrentScreen(screen);
-			screen.ScrollAgent.ScrollTo(bp);
-			screen.AddAgent(new ReappearTransitionOperation(bp));
-
-			screen.GDHUD.ScoreDispMan.FinishCounter();
-		}
-		
-		public void SetTutorialLevelScreen()
-		{
-			SetCurrentScreen(new GDGameScreen_Tutorial(this, Graphics));
-		}
-
-		public void SetDebugLevelScreen()
-		{
-			SetLevelScreen(Levels.LEVEL_DBG, FractionDifficulty.KI_EASY, Levels.WORLD_001);
-		}
-
-		public void SetMultiplayerServerLevelScreen(LevelBlueprint level, GameSpeedModes speed, int music, GDMultiplayerServer server)
-		{
-			var scrn = new GDGameScreen_MPServer(this, Graphics, level, speed, music, server);
-			SetCurrentScreen(scrn);
-		}
-
-		public void SetMultiplayerClientLevelScreen(LevelBlueprint level, GameSpeedModes speed, int music, GDMultiplayerClient server)
-		{
-			var scrn = new GDGameScreen_MPClient(this, Graphics, level, speed, music, server);
-			SetCurrentScreen(scrn);
-		}
-
-		public void SetGameEndScreen()
-		{
-			var scrn = new GDEndGameScreen(this, Graphics);
-			SetCurrentScreen(scrn);
-		}
-
-		public void SetLevelEditorScreen(SCCMLevelData dat)
-		{
-			var scrn = new LevelEditorScreen(this, Graphics, dat);
-			SetCurrentScreen(scrn);
-		}
-		
-		public void SetCustomLevelScreen(LevelBlueprint blueprint, FractionDifficulty d)
-		{
-			var scrn = new GDGameScreen_SCCMPlay(this, Graphics, blueprint, d);
-			SetCurrentScreen(scrn);
+			SGSound.IsEffectsMuted = !Settings.SoundsEnabled;
+			SGSound.IsMusicMuted = !(Settings.MusicEnabled && Settings.SoundsEnabled);
 		}
 
 		protected override void LoadContent()
 		{
 			Textures.Initialize(Content, GraphicsDevice);
-			Levels.LoadContent(Content);
 			try
 			{
 				Sound.Initialize(Content);
@@ -345,13 +168,13 @@ namespace SwitchGame.Shared
 			// NOP
 		}
 
-		public void SaveProfile()
+		public void SaveUserConfig()
 		{
-			var sdata = Profile.SerializeToString();
+			var sdata = Settings.SerializeToString();
 
 			try
 			{
-				FileHelper.Inst.WriteData(GDConstants.PROFILE_FILENAME, sdata);
+				FileHelper.Inst.WriteData(SGConstants.PROFILE_FILENAME, sdata);
 			}
 			catch (IOException e)
 			{
@@ -373,8 +196,7 @@ namespace SwitchGame.Shared
 
 			try
 			{
-				var p = new PlayerProfile();
-				p.NoAfterSerializeFixes = true;
+				var p = new UserSettings();
 				p.DeserializeFromString(sdata);
 				var sdata2 = p.SerializeToString();
 
@@ -397,7 +219,6 @@ namespace SwitchGame.Shared
 			b.AppendLine("GameCycleCounter: " + GameCycleCounter);
 			b.AppendLine("IsInitializationLag: " + IsInitializationLag);
 			b.AppendLine("MainGame.Alive: " + Alive);
-			b.AppendLine("AppType: " + GDBridge.AppType);
 
 			var scrn = screens?.CurrentScreen;
 
@@ -411,40 +232,8 @@ namespace SwitchGame.Shared
 				b.AppendLine("GameScreen.GameSpeed:      " + scrn.GameSpeed);
 			}
 
-			if (scrn is GDGameScreen)
-			{
-				b.AppendLine("GDGameScreen.HasFinished:  " + ((GDGameScreen)scrn).HasFinished);
-				b.AppendLine("GDGameScreen.Blueprint.ID: " + ((GDGameScreen)scrn).Blueprint?.UniqueID);
-				b.AppendLine("GDGameScreen.Difficulty:   " + ((GDGameScreen)scrn).Difficulty);
-				b.AppendLine("GDGameScreen.IsPaused:     " + ((GDGameScreen)scrn).IsPaused);
-			}
-
-			if (scrn is GDWorldMapScreen)
-			{
-				b.AppendLine("GDWorldMapScreen.GraphBlueprint.ID: " + ((GDWorldMapScreen)scrn)?.GraphBlueprint?.ID);
-			}
-
-
-			b.AppendLine("Profile.Language:         " + Profile.Language);
-			b.AppendLine("Profile.MusicEnabled:     " + Profile.MusicEnabled);
-			b.AppendLine("Profile.SoundsEnabled:    " + Profile.SoundsEnabled);
-			b.AppendLine("Profile.NeedsReupload:    " + Profile.NeedsReupload);
-			b.AppendLine("Profile.EffectsEnabled:   " + Profile.EffectsEnabled);
-			b.AppendLine("Profile.AccountType:      " + Profile.AccountType);
-			b.AppendLine("Textures.TEXTURE_QUALITY: " + Textures.TEXTURE_QUALITY);
-
 			return b.ToString();
 		}
-
-#if DEBUG
-		public void ResetProfile()
-		{
-			Profile.InitEmpty();
-			SaveProfile();
-
-			DebugDisplay.AddDecayLine("Profile reset", 5f, 1f, 1f);
-		}
-#endif
 	}
 }
 

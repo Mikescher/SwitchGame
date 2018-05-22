@@ -53,7 +53,7 @@ void UpdateUsages()
 				
 				if (!ids.Contains(newtextid))
 				{
-					$"[ERROR] Unknown TextID in {newsourcefile}:{newsourceline}".Dump();
+					$"[ERROR] Unknown TextID '{newtextid}' in {newsourcefile}:{newsourceline}".Dump();
 					continue;
 				}
 				
@@ -83,7 +83,7 @@ void UpdateUsages()
 
 void CreateSourcefile()
 {
-	var langs = languages.ToList();
+	var langs = languages.Where(l => l.enabled==1).ToList();
 	var texts = summary.ToList();
 	
 	var maxlen = summary.Max(s => s.id.Length+4);
@@ -121,7 +121,7 @@ void CreateSourcefile()
 	b.AppendLine("\t\t{");
 	b.AppendLine("\t\t\tL10N.Init(lang, TEXT_COUNT, LANG_COUNT);");
 	b.AppendLine();
-	b.AppendLine($"\t\t\t// {string.Join(" ", languages.Select(l => $"[{l.languagecode}]"))}");
+	b.AppendLine($"\t\t\t// {string.Join(" ", languages.Where(l => l.enabled==1).Select(l => $"[{l.languagecode}]"))}");
 	b.AppendLine();
 	foreach (var txt in texts)
 	{
@@ -134,7 +134,7 @@ void CreateSourcefile()
 		b.Append("L10N.Add(");
 		b.Append("STR_" + txt.id);
 		bool empty = false;
-		foreach (var lang in languages)
+		foreach (var lang in languages.Where(l => l.enabled==1))
 		{
 			var dat = GetPropValue(txt, lang.identifier)
 				.Replace("\\", "\\\\")
@@ -153,7 +153,7 @@ void CreateSourcefile()
 		b.AppendLine();
 	}
 	b.AppendLine();
-	b.AppendLine($"\t\t\t// {string.Join(" ", languages.Select(l => $"[{l.languagecode}]"))}");
+	b.AppendLine($"\t\t\t// {string.Join(" ", languages.Where(l => l.enabled==1).Select(l => $"[{l.languagecode}]"))}");
 	b.AppendLine();
 	b.AppendLine("#if DEBUG");
 	b.AppendLine("\t\t\tL10N.Verify();");

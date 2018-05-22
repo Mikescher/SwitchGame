@@ -20,6 +20,8 @@
     <None Include="$(MSBuildThisFileDirectory)Content\fonts\hudFontRegular.xnb" />
     <None Include="$(MSBuildThisFileDirectory)Content\fonts\levelBackgroundFont.spritefont" />
     <None Include="$(MSBuildThisFileDirectory)Content\fonts\levelBackgroundFont.xnb" />
+    <None Include="$(MSBuildThisFileDirectory)Content\sounds\button.ogg" />
+    <None Include="$(MSBuildThisFileDirectory)Content\sounds\click.ogg" />
     <None Include="$(MSBuildThisFileDirectory)L10N\L10N.sqlite3" />
     <None Include="$(MSBuildThisFileDirectory)L10N\L10NOutputMissings.linq" />
     <None Include="$(MSBuildThisFileDirectory)L10N\L10NProcessor.linq" />
@@ -40,6 +42,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Content\music\" />
     <Folder Include="$(MSBuildThisFileDirectory)Content\shaders\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Content\sounds\" />
   </ItemGroup>
 </Project>
