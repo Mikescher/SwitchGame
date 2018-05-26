@@ -5,7 +5,6 @@ using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
-using SwitchGame.Generic.Impl;
 using SwitchGame.Shared.DeviceBridge;
 using SwitchGame.Shared.Resources;
 using MonoSAMFramework.Portable;
@@ -16,11 +15,11 @@ using MonoSAMFramework.Portable.Network.Multiplayer;
 
 namespace SwitchGame.Android.Impl
 {
-	class AndroidBridge_IAB : ISGOperatingSystemBridge
+	class AndroidBridge : ISGOperatingSystemBridge
 	{
 		public FileHelper FileHelper { get; } = new AndroidFileHelper();
-		public IBillingAdapter IAB => _iab;
-		public string AppType => "Android.IAB";
+		public IBillingAdapter IAB => null;
+		public string AppType => "Android";
 		public SAMSystemType SystemType => SAMSystemType.MONOGAME_ANDROID;
 
 		public string FullDeviceInfoString { get; } = GenerateInfoStr();
@@ -32,7 +31,6 @@ namespace SwitchGame.Android.Impl
 		public string EnvironmentStackTrace => System.Environment.StackTrace;
 		
 		private readonly MainActivity _activity;
-		private readonly AndroidBilling _iab;
 
 		public void OnNativeInitialize(MonoSAMGame game)
 		{
@@ -41,14 +39,12 @@ namespace SwitchGame.Android.Impl
 
 		public void OnDestroy()
 		{
-			_iab.Disconnect();
+			//
 		}
 
-		public AndroidBridge_IAB(MainActivity a)
+		public AndroidBridge(MainActivity a)
 		{
 			_activity = a;
-
-			_iab = new AndroidBilling(a);
 		}
 
 		private static string GenerateInfoStr()
@@ -98,8 +94,7 @@ namespace SwitchGame.Android.Impl
 
 		public void HandleActivityResult(int requestCode, Result resultCode, Intent data)
 		{
-			_iab.HandleActivityResult(requestCode, resultCode, data);
-			_btfull.HandleActivityResult(requestCode, resultCode, data);
+			//
 		}
 
 		private static FSize ScreenRes()

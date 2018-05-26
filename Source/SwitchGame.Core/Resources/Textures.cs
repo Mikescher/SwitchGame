@@ -39,12 +39,6 @@ namespace SwitchGame.Shared.Resources
 		public const string TEXTURE_ASSETNAME_BD = "textures/spritesheet_default-sheet_bd";
 		public const string TEXTURE_ASSETNAME_FD = "textures/spritesheet_default-sheet_fd";
 
-		public const string TEXTURE_ASSETNAME_2_HD = "textures/spritesheet_extra-sheet_hd";
-		public const string TEXTURE_ASSETNAME_2_MD = "textures/spritesheet_extra-sheet_md";
-		public const string TEXTURE_ASSETNAME_2_LD = "textures/spritesheet_extra-sheet_ld";
-		public const string TEXTURE_ASSETNAME_2_BD = "textures/spritesheet_extra-sheet_bd";
-		public const string TEXTURE_ASSETNAME_2_FD = "textures/spritesheet_extra-sheet_fd";
-
 		public static float DEFAULT_TEXTURE_SCALE_F => DEFAULT_TEXTURE_SCALE.X;
 
 		public static Vector2 DEFAULT_TEXTURE_SCALE
@@ -91,30 +85,6 @@ namespace SwitchGame.Shared.Resources
 					default:
 						SAMLog.Error("TEX::EnumSwitch_TA", "value = " + TEXTURE_QUALITY);
 						return TEXTURE_ASSETNAME_MD;
-				}
-			}
-		}
-
-		public static string TEXTURE_ASSETNAME_2
-		{
-			get
-			{
-				switch (TEXTURE_QUALITY)
-				{
-					case TextureQuality.HD:
-						return TEXTURE_ASSETNAME_2_HD;
-					case TextureQuality.MD:
-						return TEXTURE_ASSETNAME_2_MD;
-					case TextureQuality.LD:
-						return TEXTURE_ASSETNAME_2_LD;
-					case TextureQuality.BD:
-						return TEXTURE_ASSETNAME_2_BD;
-					case TextureQuality.FD:
-						return TEXTURE_ASSETNAME_2_FD;
-					case TextureQuality.UNSPECIFIED:
-					default:
-						SAMLog.Error("TEX::EnumSwitch_TA2", "value = " + TEXTURE_QUALITY);
-						return TEXTURE_ASSETNAME_2_MD;
 				}
 			}
 		}
@@ -168,7 +138,6 @@ namespace SwitchGame.Shared.Resources
 		private static void LoadContent(ContentManager content)
 		{
 			AtlasTextures      = content.Load<TextureAtlas>(TEXTURE_ASSETNAME);
-			AtlasExtraTextures = content.Load<TextureAtlas>(TEXTURE_ASSETNAME_2);
 
 			TexCircle                = AtlasTextures["simple_circle"];
 			TexTriangle              = AtlasTextures["simple_triangle"];

@@ -72,6 +72,6 @@
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
-    <PreBuildEvent>texturepacker $(SolutionDir)SwitchGame.Content\TexturePacker\spritesheet.tps</PreBuildEvent>
+    <PreBuildEvent></PreBuildEvent>
   </PropertyGroup>
 </Project>

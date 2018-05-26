@@ -6,6 +6,7 @@ namespace SwitchGame.Windows
 	class WindowsEmulatingBillingAdapter : IBillingAdapter
 	{
 		public bool IsConnected => true;
+		public bool IsSynchronized => true;
 
 		private readonly List<string> _purchased = new List<string>();
 
@@ -22,6 +23,11 @@ namespace SwitchGame.Windows
 		public PurchaseQueryResult IsPurchased(string id)
 		{
 			return _purchased.Contains(id) ? PurchaseQueryResult.Purchased : PurchaseQueryResult.NotPurchased;
+		}
+
+		public bool SynchronizePurchases(string[] productIDs)
+		{
+			return true;
 		}
 
 		public PurchaseResult StartPurchase(string id)

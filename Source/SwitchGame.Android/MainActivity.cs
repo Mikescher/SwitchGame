@@ -23,7 +23,7 @@ namespace SwitchGame.Android
 	// ReSharper disable once ClassNeverInstantiated.Global
 	public class MainActivity : AndroidGameActivity
 	{
-		private AndroidBridge_Full _impl;
+		private AndroidBridge _impl;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{

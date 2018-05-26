@@ -56,7 +56,7 @@ namespace SwitchGame.Shared
 #endif
 					Settings.DeserializeFromString(sdata);
 #if DEBUG
-					SAMLog.Debug($"Deserialized profile in {Environment.TickCount - starttime}ms");
+					SAMLog.Debug($"Deserialized settings in {Environment.TickCount - starttime}ms");
 #endif
 				}
 				catch (Exception e)

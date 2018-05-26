@@ -23,7 +23,7 @@ namespace SwitchGame.iOS.Impl
 		public string DeviceVersion { get; } = "Apple iOS " + CrossDeviceInfo.Current.Version;
 		public FSize DeviceResolution { get; } = new FSize((float)UIScreen.MainScreen.Bounds.Width, (float)UIScreen.MainScreen.Bounds.Height);
 		public FileHelper FileHelper { get; } = new AppleFileHelper();
-		public IBillingAdapter IAB { get; } = new AppleFullVersionBilling();
+		public IBillingAdapter IAB { get; } = null;
 		public string AppType => "IOS.Full";
 		public SAMSystemType SystemType => SAMSystemType.MONOGAME_IOS;
 		
